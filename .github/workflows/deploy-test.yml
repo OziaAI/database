@@ -1,4 +1,4 @@
-name: "Deploy Wingman on test server"
+name: "Deploy Database on test server"
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
           context_name: "remote"
           ssh_cert: ${{ secrets.SSH_CERT }}
           ssh_key: ${{ secrets.SSH_KEY }}
-      - name: Deploy Wingman on created context
+      - name: Deploy the database on created context
         env:
           DB_ADMIN: ${{ secrets.DB_ADMIN }}
           DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
