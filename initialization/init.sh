@@ -55,9 +55,9 @@ create_database_if_not_exist "shops"
 create_user_if_not_exist "wingman_service" "$WINGMAN_SERVICE_PASSWORD" "conversation";
 create_user_if_not_exist "shopify_installer_service" "$SHOPIFY_INSTALLER_SERVICE_PASSWORD" "shops";
 
-create_table "shops" "shopify_installer_service" "shopify_link" "
+create_table "shops" "shopify_installer_service" "shopify_access" "
         access_token VARCHAR(255) NOT NULL,
-        shop_id INTEGER PRIMARY KEY";
+        shop VARCHAR(255) NOT NULL";
 create_table "conversation" "wingman_service" "chat_line" "
         line_text TEXT NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
