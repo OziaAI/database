@@ -16,11 +16,8 @@ connect_to_db()
 create_database_if_not_exist()
 {
     database_to_create="$1";
-    additional_table_definition="$2";
     PSQL_SHORT -tc "SELECT 1 FROM pg_database WHERE datname = $database_to_create" \
         | grep -q 1 || PSQL_SHORT -c "CREATE DATABASE $database_to_create";
-     
-    connect_to_db "$database_to_create" "$additional_table_definition";
 }
 
 create_user_if_not_exist()
@@ -38,17 +35,30 @@ create_user_if_not_exist()
     connect_to_db "$granted_db" "GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO $user_to_create";
 }
 
-create_database_if_not_exist "conversation" "
-    CREATE TABLE IF NOT EXISTS chat_line (
-        line_text TEXT NOT NULL,
-        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        chat_id INTEGER PRIMARY KEY
+create_table()
+{
+    database="$1";
+    user="$2";
+    table_name="$3";
+    table_definition="$4";
+    connect_to_db "$database" "
+    CREATE TABLE IF NOT EXISTS $table_name (
+    $table_definition
     );";
-create_database_if_not_exist "shops" "
-    CREATE TABLE shopify_link (
-        access_token VARCHAR(255) NOT NULL,
-        shop_id INTEGER PRIMARY KEY
-    );";
+
+    connect_to_db "$database" "ALTER TABLE public.$table_name OWNER TO $user";
+}
+
+create_database_if_not_exist "conversation"
+create_database_if_not_exist "shops"
 
 create_user_if_not_exist "wingman_service" "$WINGMAN_SERVICE_PASSWORD" "conversation";
 create_user_if_not_exist "shopify_installer_service" "$SHOPIFY_INSTALLER_SERVICE_PASSWORD" "shops";
+
+create_table "shops" "shopify_installer_service" "shopify_link" "
+        access_token VARCHAR(255) NOT NULL,
+        shop_id INTEGER PRIMARY KEY";
+create_table "conversation" "wingman_service" "chat_line" "
+        line_text TEXT NOT NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        chat_id INTEGER PRIMARY KEY";
