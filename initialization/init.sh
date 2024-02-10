@@ -32,6 +32,9 @@ create_user_if_not_exist()
         | grep -q 1 \
         || PSQL_SHORT -c "CREATE USER $user_to_create WITH PASSWORD '$user_password';
             GRANT ALL PRIVILEGES ON DATABASE $granted_db TO $user_to_create;"
+    connect_to_db "$granted_db" "GRANT ALL ON ALL TABLES IN SCHEMA public TO $user_to_create";
+    connect_to_db "$granted_db" "GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO $user_to_create";
+    connect_to_db "$granted_db" "GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO $user_to_create";
 }
 
 create_database_if_not_exist "conversation" "
