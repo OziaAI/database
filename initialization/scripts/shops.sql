@@ -12,3 +12,16 @@ CREATE TABLE IF NOT EXISTS shopify_access (
 
     CONSTRAINT unique_shop_name UNIQUE (shop_name)
 );
+
+CREATE OR REPLACE FUNCTION notify_change()
+RETURNS TRIGGER AS $$
+BEGIN
+    PERFORM pg_notify('ACCESS_UPDATE', NEW.access_id::text);
+    RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER shopify_access_after_insert
+AFTER INSERT ON shopify_access
+FOR EACH ROW
+EXECUTE FUNCTION notify_change();
