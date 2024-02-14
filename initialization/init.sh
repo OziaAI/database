@@ -56,8 +56,10 @@ create_database_if_not_exist "$FULL_PATH/conversation.sql";
 
 create_user_if_not_exist "wingman_service" "$WINGMAN_SERVICE_PASSWORD" "conversation";
 create_user_if_not_exist "shopify_installer_service" "$SHOPIFY_INSTALLER_SERVICE_PASSWORD" "shops";
+create_user_if_not_exist "pageindexer_service" "$PAGEINDEXER_SERVICE_PASSWORD" "shops";
 
 grant_user_ownership "wingman_service" "conversation";
 grant_user_access "wingman_service" "conversation";
 
 grant_user_access "shopify_installer_service" "shops";
+grant_user_access "pageindexer_service" "shops";
