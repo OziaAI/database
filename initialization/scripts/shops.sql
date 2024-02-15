@@ -4,7 +4,7 @@ CREATE DATABASE shops;
 \c shops
 
 CREATE TABLE IF NOT EXISTS shopify_access (
-    access_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     shop_name VARCHAR(255) NOT NULL,
     access_token VARCHAR(255) NOT NULL,
     product_loaded BOOLEAN NOT NULL DEFAULT FALSE,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS shopify_access (
 CREATE OR REPLACE FUNCTION notify_change()
 RETURNS TRIGGER AS $$
 BEGIN
-    PERFORM pg_notify('ACCESS_UPDATE', NEW.access_id::text);
+    PERFORM pg_notify('access_update', NEW.access_id::text);
     RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
