@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS shopify_access (
 CREATE OR REPLACE FUNCTION notify_change()
 RETURNS TRIGGER AS $$
 BEGIN
-    PERFORM pg_notify('access_update', NEW.access_id::text);
+    PERFORM pg_notify('access_update', NEW.id::text);
     RETURN NEW;
 END
 $$ LANGUAGE plpgsql;
