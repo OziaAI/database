@@ -22,6 +22,7 @@ jobs:
           DB_ADMIN_PASSWORD: ${{ secrets.DB_ADMIN_PASSWORD }}
           WINGMAN_SERVICE_PASSWORD: ${{ secrets.WINGMAN_SERVICE_PASSWORD }}
           SHOPIFY_INSTALLER_SERVICE_PASSWORD: ${{ secrets.SHOPIFY_INSTALLER_SERVICE_PASSWORD }}
+          PAGEINDEXER_SERVICE_PASSWORD: ${{ secrets.PAGEINDEXER_SERVICE_PASSWORD }}
         run: |
           docker --context remote compose up --build -d
 
